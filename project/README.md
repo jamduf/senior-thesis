@@ -21,3 +21,37 @@ Install:
 
 ```bash
 pip install PyQt6 numpy opencv-python mapbox_earcut
+
+## How to Use
+
+To use the lasso tool, run the following command:  
+```bash
+python pattern_lasso.py
+
+#### INSERT IMAGE HERE
+
+Then, use these controls to select the pattern pieces:
+
+| Key  | Action |
+| ------------- | ------------- |
+| Left Click  | Add anchor point  |
+| Right Click  | Undo last anchor  |
+| Enter | Close Panel  |
+| N  | Save Panel  |
+| D  | Duplicate Panel  |
+| M  | Mirror Panel (Horizontal)  |
+| F  | Flip Panel (Vertical)  |
+| E  | Export Current Panel  |
+| X  | Export All Saved Panels |
+| R  | Reset Current Selection | 
+
+
+### GUIDE HERE:
+
+limitations on patterns -- what parts should you not select for pants / shirts / jackets ?
+pants - button fly / pockets
+shirts - pockets
+jackets - 
+
+
+
