@@ -5,6 +5,8 @@ bigdata/
 # Models
 *.pt
 models/
+!models/pattern_retarget_pants_v1.pt
+!models/pattern_retarget_shirt_v2.pt
 
 # Python
 venv/
