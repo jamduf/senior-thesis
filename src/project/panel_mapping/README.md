@@ -108,7 +108,7 @@ pattern_retarget_pants_only_v1.pt
 
 # Running Inference
 
-Example:
+General Example:
 
 ```bash
 ./run_lasso_to_model.sh \
@@ -119,7 +119,7 @@ Example:
   output_dir
 ```
 
-Example: using the shirt model with random testing measurements: 
+Specific Example: Using the shirt model with random testing measurements: 
 ```bash
 ./run_lasso_to_model.sh \
   pattern_project.json \
