@@ -81,7 +81,7 @@ Features include:
 - export to structured pattern format
 
 <p align="center">
-  <img src="docs/images/lassotoolex1.png" width="700">
+  <img src="docs/images/lassotoolex1.png" width="350">
 </p>
 
 See:
