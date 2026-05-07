@@ -119,6 +119,16 @@ Example:
   output_dir
 ```
 
+Example: using the shirt model with random testing measurements: 
+```bash
+./run_lasso_to_model.sh \
+  pattern_project.json \
+  source_measurements_gc.yaml \
+  target_measurements_gc.yaml \
+  pattern_retarget_shirt_v2.pt \
+  output_dir
+```
+
 ---
 
 # Outputs
