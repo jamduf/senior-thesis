@@ -11,7 +11,6 @@ Interactive tool for extracting sewing pattern panels from images and exporting 
 - Panel duplication and symmetry tools
 - Edge matching / seam pairing workflow
 - Export to `.ply` mesh format
-- Compatible with downstream pattern → mesh → ML retargeting pipeline
 
 ---
 
@@ -37,17 +36,13 @@ pip install PyQt6 numpy opencv-python mapbox_earcut
 
 The current prototype works best with:
 
+- Shirt / Pants / Jacket patterns are currently the only supported pattern types
+
 - Non-stretch woven garments
-- Simpler garments with fewer panels
+- Simpler garments with fewer panels -- currently the model is trained on a pretty limited dataset, so simpler patterns work best 
 - Clear pattern outlines
 - Flat scanned sewing patterns
 - Minimal overlapping markings
-
-Examples:
-- basic shirts
-- simple trousers
-- skirts
-- simple jackets
 
 ---
 
@@ -55,27 +50,6 @@ Examples:
 
 The current implementation does **not** handle highly detailed construction features well.
 
-Avoid:
-
-### Pants
-- button flies
-- zipper flies
-- pockets
-- cargo details
-
-### Shirts
-- chest pockets
-- decorative pleats
-- complex collars
-
-### Jackets
-- cuffs
-- welt pockets
-- lining panels
-- shoulder pads
-- highly segmented tailoring
-
-### General
 - stretch / athletic wear
 - knit garments
 - overlapping pattern pieces
@@ -89,15 +63,14 @@ Run the lasso tool:
 
 ```bash
 python pattern_lasso.py
+
 ```
 
 ---
 
 # Application Overview
 
-![Application Overview](lassotoolex_1.png)
-
-*Figure 1: Main interface overview.*
+![Application Overview](lassotoolex1.png)
 
 ---
 
@@ -132,9 +105,7 @@ The magnetic lasso will attempt to snap to nearby edges automatically.
 
 Right click removes the most recent anchor.
 
-![Selecting Edges](lassotoolex_2.png)
-
-*Figure 2: Edge selection with magnetic snapping.*
+![Selecting Edges](lassotoolex2.png)
 
 ---
 
@@ -145,9 +116,7 @@ Once the full outline is traced:
 1. Press `Enter` to close the polygon
 2. Press `N` to save the panel
 
-![Saving a Panel](lassotoolex_3.png)
-
-*Figure 3: Closing and saving a panel.*
+![Saving a Panel](lassotoolex3.png)
 
 ---
 
@@ -157,21 +126,17 @@ Panels can be duplicated and transformed to accelerate annotation of symmetric g
 
 ### Duplicate Panel (`D`)
 
-Useful for mirrored garment pieces such as sleeves or pant legs.
+Useful for mirrored garment pieces such as sleeves or pant legs. Look for notations on the pattern like 'fold' or lines indicating folding to see which panels need to be duplicated on shirts / jackets.
 
-![Duplicating Panels](lassotoolex_4.png)
-
-*Figure 4: Duplicating a panel.*
+![Duplicating Panels](lassotoolex4.png)
 
 ---
 
 ### Mirror / Flip Panels (`H` / `V`)
 
-Mirror or vertically flip duplicated pieces to align with the original garment layout.
+Mirror or vertically flip duplicated pieces to align with the original garment layout. This will be necessary for edge matching later on. 
 
-![Mirroring Panels](lassotoolex_5.png)
-
-*Figure 5: Mirroring and flipping panels.*
+![Mirroring Panels](lassotoolex5.png)
 
 ---
 
@@ -182,9 +147,7 @@ A completed annotation should include all major garment panels.
 **Note:**  
 In this example, the shirt pocket is intentionally excluded because the current lasso tool and downstream ML pipeline do not yet handle small decorative subcomponents reliably.
 
-![Completed Pattern](lassotoolex_6.png)
-
-*Figure 6: Example completed panel extraction.*
+![Completed Pattern](lassotoolex6.png)
 
 ---
 
@@ -210,9 +173,9 @@ Examples:
 - sleeve ↔ armhole
 - front torso ↔ back torso side seams
 - inseam ↔ inseam
-- collar attachment edges
+- duplicated pieces, if intended to be one solid piece should be matched on the folded edge.
 
-![Edge Matching](lassotoolex_7.png)
+![Edge Matching](lassotoolex7.png)
 
 *Figure 7: Selecting matching sewn edges.*
 
