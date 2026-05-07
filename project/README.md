@@ -70,9 +70,7 @@ python pattern_lasso.py
 
 # Application Overview
 
-![Application Overview](lassotoolex1.png)
-
----
+<img src="../docs/images/lassotoolex1.png" width="350">
 
 # Controls
 
@@ -91,8 +89,6 @@ python pattern_lasso.py
 | [ / ] | Rotate selected panel |
 | S | Toggle edge matching mode |
 
----
-
 # Workflow Guide
 
 ---
@@ -105,7 +101,7 @@ The magnetic lasso will attempt to snap to nearby edges automatically.
 
 Right click removes the most recent anchor.
 
-![Selecting Edges](lassotoolex2.png)
+<img src="../docs/images/lassotoolex2.png" width="350">
 
 ---
 
@@ -116,7 +112,7 @@ Once the full outline is traced:
 1. Press `Enter` to close the polygon
 2. Press `N` to save the panel
 
-![Saving a Panel](lassotoolex3.png)
+<img src="../docs/images/lassotoolex3.png" width="350">
 
 ---
 
@@ -128,7 +124,7 @@ Panels can be duplicated and transformed to accelerate annotation of symmetric g
 
 Useful for mirrored garment pieces such as sleeves or pant legs. Look for notations on the pattern like 'fold' or lines indicating folding to see which panels need to be duplicated on shirts / jackets.
 
-![Duplicating Panels](lassotoolex4.png)
+<img src="../docs/images/lassotoolex4.png" width="350">
 
 ---
 
@@ -136,7 +132,7 @@ Useful for mirrored garment pieces such as sleeves or pant legs. Look for notati
 
 Mirror or vertically flip duplicated pieces to align with the original garment layout. This will be necessary for edge matching later on. 
 
-![Mirroring Panels](lassotoolex5.png)
+<img src="../docs/images/lassotoolex5.png" width="350">
 
 ---
 
@@ -147,7 +143,7 @@ A completed annotation should include all major garment panels.
 **Note:**  
 In this example, the shirt pocket is intentionally excluded because the current lasso tool and downstream ML pipeline do not yet handle small decorative subcomponents reliably.
 
-![Completed Pattern](lassotoolex6.png)
+<img src="../docs/images/lassotoolex6.png" width="350">
 
 ---
 
@@ -175,9 +171,7 @@ Examples:
 - inseam ↔ inseam
 - duplicated pieces, if intended to be one solid piece should be matched on the folded edge.
 
-![Edge Matching](lassotoolex7.png)
-
-*Figure 7: Selecting matching sewn edges.*
+<img src="../docs/images/lassotoolex7.png" width="350">
 
 ---
 
@@ -185,7 +179,7 @@ Examples:
 
 Once all seam relationships are defined, the garment topology is complete.
 
-![Matched Garment](lassotoolex_8.png)
+<img src="../docs/images/lassotoolex7.png" width="350">
 
 *Figure 8: Completed seam pairing layout.*
 
@@ -197,7 +191,7 @@ Press `X` to export all saved panels and seam relationships.
 
 The exported format is compatible with the downstream geometry and ML pipeline.
 
-![Exporting Pattern](lassotoolex_9.png)
+<img src="../docs/images/lassotoolex7.png" width="350">
 
 *Figure 9: Exported structured garment pattern.*
 
