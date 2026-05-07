@@ -1,0 +1,90 @@
+##Note: these are approximate sizes that are mainly for testing purposes. 
+
+sizes:
+
+  "8":
+    body:
+      arm_length: 56.0
+      arm_pose_angle: 35.0
+      armscye_depth: 20.0
+      back_width: 36.0
+      bum_points: 18.0
+      bust: 89.0
+      bust_line: 26.0
+      bust_points: 19.0
+      crotch_hip_diff: 10.0
+      head_l: 24.0
+      height: 165.0
+      hip_back_width: 48.0
+      hip_inclination: 7.0
+      hips: 97.0
+      hips_line: 21.0
+      leg_circ: 56.0
+      neck_w: 17.0
+      shoulder_incl: 21.0
+      shoulder_w: 38.0
+      underbust: 76.0
+      vert_bust_line: 21.0
+      waist: 71.0
+      waist_back_width: 38.0
+      waist_line: 40.0
+      waist_over_bust_line: 41.0
+      wrist: 16.0
+
+  "10":
+    body:
+      arm_length: 57.0
+      arm_pose_angle: 35.0
+      armscye_depth: 21.0
+      back_width: 37.0
+      bum_points: 18.5
+      bust: 94.0
+      bust_line: 27.0
+      bust_points: 20.0
+      crotch_hip_diff: 10.0
+      head_l: 24.5
+      height: 168.0
+      hip_back_width: 50.0
+      hip_inclination: 7.0
+      hips: 102.0
+      hips_line: 22.0
+      leg_circ: 58.0
+      neck_w: 18.0
+      shoulder_incl: 21.0
+      shoulder_w: 39.0
+      underbust: 81.0
+      vert_bust_line: 22.0
+      waist: 76.0
+      waist_back_width: 40.0
+      waist_line: 41.0
+      waist_over_bust_line: 42.0
+      wrist: 16.5
+
+  "12":
+    body:
+      arm_length: 58.0
+      arm_pose_angle: 35.0
+      armscye_depth: 22.0
+      back_width: 38.0
+      bum_points: 19.0
+      bust: 99.0
+      bust_line: 28.0
+      bust_points: 21.0
+      crotch_hip_diff: 11.0
+      head_l: 25.0
+      height: 170.0
+      hip_back_width: 52.0
+      hip_inclination: 7.0
+      hips: 107.0
+      hips_line: 23.0
+      leg_circ: 60.0
+      neck_w: 18.5
+      shoulder_incl: 21.0
+      shoulder_w: 40.0
+      underbust: 86.0
+      vert_bust_line: 23.0
+      waist: 81.0
+      waist_back_width: 42.0
+      waist_line: 42.0
+      waist_over_bust_line: 43.0
+      wrist: 17.0

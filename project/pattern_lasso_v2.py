@@ -16,7 +16,7 @@ import mapbox_earcut as earcut
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtGui import QImage, QPainter, QPen, QColor
 from PyQt6.QtWidgets import (
-    QApplication, QMainWindow, QFileDialog, QWidget, QMessageBox
+    QApplication, QMainWindow, QFileDialog, QWidget, QMessageBox, QComboBox
 )
 
 from pattern_core_models import (
@@ -34,6 +34,35 @@ from pattern_core_transforms import (
 )
 from pattern_core_validation import validate_project
 from pattern_core_io import save_project_json
+
+
+SHIRT_PANEL_LABELS = [
+    "left_btorso",
+    "left_collar_back",
+    "left_collar_front",
+    "left_ftorso",
+    "left_hood",
+    "left_sleeve_b",
+    "left_sleeve_f",
+    "right_btorso",
+    "right_collar_back",
+    "right_collar_front",
+    "right_ftorso",
+    "right_hood",
+    "right_sleeve_b",
+    "right_sleeve_f",
+    "sl_left_cuff_b",
+    "sl_left_cuff_f",
+    "sl_left_cuff_skirt_b",
+    "sl_left_cuff_skirt_f",
+    "sl_right_cuff_b",
+    "sl_right_cuff_f",
+    "sl_right_cuff_skirt_b",
+    "sl_right_cuff_skirt_f",
+    "wb_back",
+    "wb_front",
+]
+
 
 
 # -----------------------------
@@ -280,6 +309,9 @@ class PatternCanvas(QWidget):
         self.selected_panel_id: Optional[str] = None
         self.selected_edge_ref: Optional[Tuple[str, str]] = None  # (panel_id, edge_id)
 
+        # Duplicated panel waiting to be labeled/saved with N
+        self.pending_duplicate: Optional[PanelAnnotation] = None
+
         self.seam_pair_mode = False
         self.pending_edge_ref: Optional[Tuple[str, str]] = None  # (panel_id, edge_id)
         # Settings
@@ -287,6 +319,15 @@ class PatternCanvas(QWidget):
         self.simplify_eps = 1.5
         self.max_preview_rate = 10
         self._move_ctr = 0
+
+        # Panel semantic label selector.
+        # This label is saved into panel.name when pressing N.
+        self.panel_label_combo = QComboBox(self)
+        self.panel_label_combo.addItems(SHIRT_PANEL_LABELS)
+        self.panel_label_combo.setToolTip("GarmentCode label for the next saved panel")
+        self.panel_label_combo.move(10, 55)
+        self.panel_label_combo.resize(240, 28)
+        self.panel_label_combo.show()
 
     # -------------------------
     # Image/project setup
@@ -394,6 +435,28 @@ class PatternCanvas(QWidget):
                 seam_type="stitch",
             )
         )
+
+    def _undo_last_seam_connection(self):
+        if not self.project.seams:
+            QMessageBox.information(self, "Seam", "No seam connections to undo.")
+            return
+
+        seam = self.project.seams.pop()
+
+        edge_a = self.project.get_edge(seam.edge_a_id)
+        edge_b = self.project.get_edge(seam.edge_b_id)
+
+        if edge_a is not None:
+            edge_a.edge_type = "unknown"
+            edge_a.pair_edge_id = ""
+
+        if edge_b is not None:
+            edge_b.edge_type = "unknown"
+            edge_b.pair_edge_id = ""
+
+        self.pending_edge_ref = None
+        print(f"Undid seam {seam.id}")
+        self.update()
 
     # -------------------------
     # Geometry helpers
@@ -669,12 +732,27 @@ class PatternCanvas(QWidget):
                 self.update()
 
         elif key == Qt.Key.Key_N:
-            # Commit current closed polygon as structured panel
+            selected_label = self.panel_label_combo.currentText()
+
+            # First commit a pending duplicated panel, if one exists.
+            if self.pending_duplicate is not None:
+                panel = self.pending_duplicate
+                panel.name = selected_label
+                self.project.panels.append(panel)
+                self.selected_panel_id = panel.id
+                self.pending_duplicate = None
+                print(f"Saved duplicated panel {panel.id} as {panel.name}")
+                self.update()
+                return
+
+            # Otherwise commit current closed polygon as structured panel.
             if self.closed:
                 panel = self._build_current_panel_annotation()
                 if panel is not None:
+                    panel.name = selected_label
                     self.project.panels.append(panel)
                     self.selected_panel_id = panel.id
+                    print(f"Saved panel {panel.id} as {panel.name}")
                 self.reset_current()
                 self.update()
 
@@ -709,8 +787,9 @@ class PatternCanvas(QWidget):
                     new_id = self.project.next_panel_id()
                     dup = duplicate_panel(src, new_id, new_id)
                     translate_panel(dup, 20.0, 20.0)
-                    self.project.panels.append(dup)
-                    self.selected_panel_id = dup.id
+                    self.pending_duplicate = dup
+                    self.selected_panel_id = None
+                    print(f"Created pending duplicate {dup.id}. Choose label, then press N to save.")
                     self.update()
 
         elif key == Qt.Key.Key_H:
@@ -739,18 +818,19 @@ class PatternCanvas(QWidget):
             self.pending_edge_ref = None
             self.update()
 
+        elif key == Qt.Key.Key_U:
+            self._undo_last_seam_connection()
+
+        elif key == Qt.Key.Key_Escape:
+            self.pending_edge_ref = None
+            print("Cancelled pending seam selection.")
+            self.update()
+
         elif key == Qt.Key.Key_BracketRight:
             if self.selected_panel_id is not None:
                 p = self.project.get_panel(self.selected_panel_id)
                 if p is not None:
                     rotate_panel(p, 5.0)
-                    self.update()
-
-        elif key == Qt.Key.Key_O:
-            if self.selected_panel_id is not None:
-                p = self.project.get_panel(self.selected_panel_id)
-                if p is not None:
-                    p.cut_on_fold = not p.cut_on_fold
                     self.update()
 
         elif key == Qt.Key.Key_Delete or key == Qt.Key.Key_Backspace:
@@ -801,6 +881,27 @@ class PatternCanvas(QWidget):
                 suffix = " [fold]" if p.cut_on_fold else ""
                 painter.drawText(int(cx), int(cy), p.name + suffix)
 
+        # Draw pending duplicated panel before it is saved
+        if self.pending_duplicate is not None:
+            painter.setPen(QPen(QColor(255, 120, 0), 3))
+            p = self.pending_duplicate
+            for e in p.edges:
+                pts = e.polyline
+                for i in range(1, len(pts)):
+                    painter.drawLine(
+                        QPointF(pts[i - 1][0], pts[i - 1][1]),
+                        QPointF(pts[i][0], pts[i][1])
+                    )
+            poly = p.polygon
+            if poly:
+                cx = sum(pt[0] for pt in poly) / len(poly)
+                cy = sum(pt[1] for pt in poly) / len(poly)
+                painter.drawText(
+                    int(cx),
+                    int(cy),
+                    f"PENDING: {self.panel_label_combo.currentText()}"
+                )
+
         # Draw current anchors
         pen_anchor = QPen(QColor(255, 80, 80), 6)
         painter.setPen(pen_anchor)
@@ -828,6 +929,9 @@ class PatternCanvas(QWidget):
         msg = (
             f"Anchors: {len(self.anchors)} | Closed: {self.closed} | "
             f"Panels saved: {len(self.project.panels)} | "
+            f"Label: {self.panel_label_combo.currentText()} | "
+            f"Pending dup: {self.pending_duplicate is not None} | "
+            f"Seam mode: {self.seam_pair_mode} | "
             f"simplify_eps: {self.simplify_eps:.1f}px"
         )
         painter.drawText(10, 20, msg)

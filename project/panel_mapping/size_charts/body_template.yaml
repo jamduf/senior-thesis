@@ -1,0 +1,27 @@
+body:
+  arm_length:
+  arm_pose_angle:
+  armscye_depth:
+  back_width:
+  bum_points:
+  bust:
+  bust_line:
+  bust_points:
+  crotch_hip_diff:
+  head_l:
+  height:
+  hip_back_width:
+  hip_inclination:
+  hips:
+  hips_line:
+  leg_circ:
+  neck_w:
+  shoulder_incl:
+  shoulder_w:
+  underbust:
+  vert_bust_line:
+  waist:
+  waist_back_width:
+  waist_line:
+  waist_over_bust_line:
+  wrist:
