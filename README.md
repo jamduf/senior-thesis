@@ -1,302 +1,194 @@
-# Learning-Based Garment Pattern Retargeting (temporary chatgpt readme)
+# Sewing Pattern Retargeting & Pattern Extraction
 
-Research project exploring machine learning approaches for resizing and retargeting sewing patterns while preserving garment structure and stylistic features.
+Prototype pipeline for extracting sewing pattern panels from images and retargeting them to new body measurements using machine learning.
 
-This repository contains:
+<p align="center">
+  <img src="docs/images/repothumbnail.png" width="1200">
+</p>
 
-- an interactive pattern extraction / lasso annotation tool
-- geometry conversion utilities
-- dataset processing pipelines
-- ML models for garment retargeting
-- evaluation and visualization scripts
-
-The project is built around the idea of converting arbitrary sewing patterns into structured geometric representations that can later be resized or adapted to new body measurements.
+<p align="center">
+  <em>1: Original garment pattern image. 2: Lasso tool pattern selection. 3: Extracted .svg filetype. 4: Retargeted pattern with updated size.</em>
+</p>
 
 ---
 
-# Project Goal
+## Project Overview
 
-Traditional garment drafting systems rely on explicit drafting rules and handcrafted sizing formulas.
+This project explores how machine learning can assist with sewing pattern resizing and adaptation.
 
-This project instead explores a **data-driven approach**:
+The pipeline combines:
+
+- interactive sewing pattern extraction from images
+- panel labeling and edge matching
+- geometric pattern processing
+- neural pattern retargeting conditioned on body measurements
+
+The goal is to support workflows such as:
 
 ```text
-Pattern Image / PDF
+sewing pattern image
         ↓
-Structured Pattern Extraction
+interactive panel extraction
         ↓
-Geometric Representation
+structured sewing pattern representation
         ↓
-ML-Based Retargeting
+body-conditioned pattern retargeting
         ↓
-Resized Garment Pattern
+resized/exportable sewing pattern
 ```
-
-The long-term goal is to support:
-
-- historical sewing patterns
-- scanned PDF patterns
-- arbitrary drafting systems
-- style-preserving resizing
-- downstream garment simulation pipelines
 
 ---
 
 # Repository Structure
 
 ```text
-.
-├── docs/
-│   └── images/
-│
-├── models/
-│   └── trained checkpoints (.pt)
-│
-├── project/
-│   └── interactive lasso / annotation tool
-│
-├── src/
-│   ├── evaluation/
-│   ├── export/
-│   ├── geometry/
-│   └── training/
-│
-└── README.md
+src/
+    pattern_lasso_v2.py        Interactive extraction tool
+    pattern_core_*             Internal pattern data structures
+
+    panel_mapping/
+        lasso_to_model_input.py
+        run_lasso_to_model.sh
+        size_charts/
+
+models/
+    pattern_retarget_shirt_v2.pt
+    pattern_retarget_pants_only_v1.pt
+
+docs/
+    images/
 ```
 
 ---
 
-# Main Components
+# Features
 
-## 1. Pattern Lasso Tool
+## Interactive Pattern Extraction
 
-Interactive annotation tool for extracting garment panels from sewing pattern images.
+The lasso tool supports:
 
-Features include:
-
-- magnetic lasso edge snapping
-- panel extraction
-- duplication / mirroring tools
-- seam pairing
-- export to structured pattern format
+- edge-snapping pattern tracing
+- semantic garment panel labeling
+- seam pairing annotation
+- panel duplication / mirroring
+- structured JSON export
 
 <p align="center">
-  <img src="docs/images/lassotoolex1.png" width="350">
+  <img src="docs/images/lassotoolex_6.png" width="400">
 </p>
 
-See:
+Additional examples and controls are documented in:
 
 ```text
-project/README.md
+src/README.md
+models/README.md
 ```
-
-for the full workflow guide.
 
 ---
 
-## 2. Garment Retargeting Models
+## ML-Based Pattern Retargeting
 
-PyTorch-based models trained on the GarmentCode dataset to learn:
+The retargeting model:
 
-```text
-(pattern geometry + body measurements)
-            ↓
-retargeted garment pattern
-```
+- consumes structured garment panel geometry
+- conditions on body measurements
+- predicts resized panel geometry
+- preserves garment structure through conservative blending, maintaining aesthetic choices 
 
-Current experiments include:
+Currently supported garment categories:
 
 - shirts
 - pants
-- multi-panel garments
-
-The models aim to preserve:
-
-- garment topology
-- panel structure
-- stylistic proportions
-- seam relationships
-
-while adapting to new body measurements.
 
 ---
 
-## 3. Geometry / Export Utilities
-
-Utilities for:
-
-- SVG conversion
-- mesh generation
-- panel export
-- structured pattern serialization
-
-These tools connect the annotation pipeline to downstream ML workflows.
-
----
-
-# Dataset
-
-This project uses the:
-
-## GarmentCode Dataset
-
-GitHub:
-https://github.com/maria-korosteleva/GarmentCode
-
-The dataset provides:
-
-- sewing pattern specifications
-- body measurements
-- panel geometry
-- seam topology
-- SVG exports
-- mesh-compatible garment representations
-
-The current pipeline focuses on:
-
-- shirt retargeting
-- pants retargeting
-- style-preserving geometric adaptation
-
----
-
-# Current Pipeline
-
-## Annotation
-
-```text
-Pattern image
-    ↓
-Interactive lasso extraction
-    ↓
-Structured garment representation
-```
-
-## Retargeting
-
-```text
-Source garment + target body
-            ↓
-Neural network prediction
-            ↓
-Updated panel geometry
-```
-
-## Export
-
-```text
-Predicted geometry
-        ↓
-SVG / mesh export
-```
-
----
-
-# Current Limitations
+# Current Status
 
 This repository is an active research prototype.
 
-Known limitations include:
+Current strengths:
 
-- limited support for highly detailed garments
-- limited support for pockets / cuffs / lining panels
-- limited support for stretch garments
-- no cloth simulation
-- no automatic pattern parsing from PDFs
-- limited dataset diversity for complex garments
+- successful panel extraction from real sewing patterns
+- semantic panel labeling workflow
+- end-to-end lasso → model → SVG pipeline
+- pretrained shirt and pants retargeting checkpoints
 
-The current system works best on:
+Current limitations:
 
-- simpler woven garments
-- lower-panel-count patterns
-- non-stretch garments
+- limited training distribution
+- training data limited in structure -- only allows 4 torso panels for a shirt, for example
+- partial support for complex garment details
+- no final sewing instruction generation yet
 
----
+Patterns currently work best when they:
 
-# Requirements
-
-Main dependencies:
-
-- Python 3.9+
-- PyTorch
-- PyQt6
-- numpy
-- opencv-python
-- matplotlib
-- mapbox_earcut
+- use non-stretch woven fabrics
+- contain relatively simple panel structures
+- avoid highly decorative construction details such as pockets
 
 ---
 
-# Installation
+# Example Pipeline
+
+## 1. Extract Pattern Panels
 
 ```bash
-git clone https://github.com/jamduf/senior-thesis.git
-cd senior-thesis
-
-pip install -r requirements.txt
+python src/pattern_lasso_v2.py
 ```
 
----
+## 2. Label Panels + Match Seams
 
-# Example Workflow
+Export structured garment JSON.
 
-## Train a model
+## 3. Run Retargeting
 
 ```bash
-python src/training/model_test.py \
-  --batch_dir path/to/garments_5000_0 \
-  --epochs 10 \
-  --filter_mode shirt
+./run_lasso_to_model.sh \
+  pattern_project.json \
+  source_measurements_gc.yaml \
+  target_measurements_gc.yaml \
+  checkpoint.pt \
+  output_dir
 ```
 
----
+## 4. Export SVG Output
 
-## Evaluate a checkpoint
-
-```bash
-python src/evaluation/evaluate_checkpoint.py \
-  --checkpoint models/pattern_retarget_shirt_v2.pt
-```
-
----
-
-## Launch the lasso tool
-
-```bash
-python project/pattern_lasso_v2.py
-```
+Predicted garment panels are exported as SVG for visualization.
 
 ---
 
 # Research Direction
 
-This project explores:
+This project investigates where learned geometric priors may be useful in sewing pattern adaptation.
 
-- learned garment retargeting
-- geometric style preservation
-- sewing pattern extraction
-- shape correspondence
-- ML-assisted apparel design pipelines
+Traditional grading methods work well for many standardized garments, but learned models may help preserve higher-level design characteristics in garments with:
 
-The broader objective is to build systems capable of adapting arbitrary sewing patterns to new body measurements without requiring explicit drafting rules.
+- complex silhouettes
+- stylistic ease variations
+- unconventional proportions
+- non-standardized construction logic
+
+The project focuses on combining human-guided extraction with learned geometric retargeting.
 
 ---
 
-# Status
+# Requirements
 
-Current functionality:
+Core dependencies:
 
-- shirt retargeting
-- pants retargeting
-- panel extraction tooling
-- seam pairing
-- SVG export
-- evaluation pipelines
+```bash
+pip install \
+    numpy \
+    torch \
+    PyQt6 \
+    opencv-python \
+    mapbox-earcut \
+    matplotlib \
+    pyyaml
+```
 
-In progress:
+---
 
-- jacket support
-- improved topology handling
-- historical pattern support
-- automated pattern parsing
-- improved style preservation
+# Author
+
+Senior thesis / research prototype exploring machine learning approaches for sewing pattern retargeting and garment geometry processing.
