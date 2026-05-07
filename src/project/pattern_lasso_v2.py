@@ -61,6 +61,20 @@ SHIRT_PANEL_LABELS = [
     "sl_right_cuff_skirt_f",
     "wb_back",
     "wb_front",
+    "pant_b_l",
+    "pant_b_r",
+    "pant_f_l",
+    "pant_f_r",
+    "pant_l_cuff_b",
+    "pant_l_cuff_f",
+    "pant_l_cuff_skirt_b",
+    "pant_l_cuff_skirt_f",
+    "pant_r_cuff_b",
+    "pant_r_cuff_f",
+    "pant_r_cuff_skirt_b",
+    "pant_r_cuff_skirt_f",
+    "wb_back",
+    "wb_front",
 ]
 
 
