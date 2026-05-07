@@ -81,6 +81,7 @@ Additional examples and controls are documented in:
 
 ```text
 src/project/README.md
+src/project/panel_mapping/README.md
 models/README.md
 ```
 
@@ -156,6 +157,16 @@ Export structured garment JSON.
 Predicted garment panels are exported as SVG for visualization.
 
 ---
+## Dataset / External Resources
+
+This project uses garment geometry and body measurement data derived from the GarmentCode dataset and framework.
+
+GarmentCode:
+- https://github.com/maria-korosteleva/GarmentCode
+
+If you use this repository for research purposes, please also cite the original GarmentCode work.
+
+The machine learning models in this repository were trained on processed garment/body data generated from GarmentCode assets.
 
 # Research Direction
 
