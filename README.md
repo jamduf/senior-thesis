@@ -80,7 +80,7 @@ The lasso tool supports:
 Additional examples and controls are documented in:
 
 ```text
-src/README.md
+src/project/README.md
 models/README.md
 ```
 
