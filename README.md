@@ -68,7 +68,7 @@ $ PYTHONPATH="../../models;../../utils" ./run_lasso_to_model.sh \
   output_dir
 ```
 
-The command above generates a new pattern shown below: 
+Along with JSON-formatted representations of the sewing patterns, the model also generates `.svg` files that can be visualized.
 
 .svg-formatted source pattern:
 
