@@ -60,6 +60,7 @@ python pattern_lasso.py
 | R | Reset current selection |
 | [ / ] | Rotate selected panel |
 | S | Toggle edge matching mode |
+| J | Export to JSON file |
 
 # Workflow Guide
 
