@@ -2,7 +2,7 @@
 
 Interactive tool for extracting sewing pattern panels from images and exporting them into a structured format for downstream processing (e.g., `.ply` meshes for GarmentCode-style datasets).
 
-# Selecting a Pattern
+## Selecting a Pattern
 
 ## Ideal Patterns
 
@@ -16,31 +16,16 @@ The current prototype works best with:
 - Flat scanned sewing patterns
 - Minimal overlapping markings
 
----
+## How to Use
 
-## Patterns to Avoid
-
-The current implementation does **not** handle highly detailed construction features well.
-
-- stretch / athletic wear
-- knit garments
-- overlapping pattern pieces
-- heavily annotated scans
-
----
-
-# How to Use
-
-Run the lasso tool:
+Run the lasso tool from the root directory:
 
 ```bash
-python pattern_lasso.py
+$ python3 src/project/pattern_lasso_v2.py
 
 ```
 
----
-
-# Application Overview
+## Application Overview
 
 <img src="../../docs/images/lassotoolex_1.png" width="350">
 
@@ -60,11 +45,10 @@ python pattern_lasso.py
 | R | Reset current selection |
 | [ / ] | Rotate selected panel |
 | S | Toggle edge matching mode |
+| U | Undo last edge match |
 | J | Export to JSON file |
 
 # Workflow Guide
-
----
 
 ## 1. Selecting Edges
 
@@ -75,8 +59,6 @@ The magnetic lasso will attempt to snap to nearby edges automatically.
 Right click removes the most recent anchor.
 
 <img src="../../docs/images/lassotoolex_2.png" width="350">
-
----
 
 ## 2. Closing and Saving a Panel
 
@@ -89,11 +71,7 @@ Once the full outline is traced:
 <img src="../../docs/images/lassotoolex_3.png" width="350">
 <img src="../../docs/images/lassotoolex_4.png" width="350">
 
----
-
 ## 3. Duplicating and Transforming Panels
-
-Panels can be duplicated and transformed to accelerate annotation of symmetric garments.
 
 ### Duplicate Panel (`D`)
 
@@ -101,23 +79,17 @@ Useful for mirrored garment pieces such as sleeves or pant legs. Look for notati
 
 <img src="../../docs/images/lassotoolex_5.png" width="350">
 
----
-
 ### Mirror / Flip Panels (`H` / `V`)
 
 Mirror or vertically flip duplicated pieces to align with the original garment layout. This will be necessary for edge matching later on. 
 
 <img src="../../docs/images/lassotoolex_6.png" width="350">
 
----
-
 ### Completed Panel Layout
 
 A completed annotation should include all major garment panels. Because of limitations with the model training set and what details are supported, details like pockets should not be included in the completed panel layout. Additionally, there should not be more than one of any panel type, meaning that there can only be up to 4 torso panels etc. 
 
----
-
-# Edge Matching Mode
+## Edge Matching Mode
 
 Press `S` to enter edge matching mode.
 
@@ -129,16 +101,16 @@ In this mode:
 
 These seam pairings are later used to reconstruct garment topology.
 
----
+### Which Edges Should Be Matched?
 
-## Which Edges Should Be Matched?
-
-Edges that are physically sewn together in the final garment should be paired.
+Edges that are physically sewn together in the final garment should be paired. If an accidental selection is made, press 'U' to undo the last matched pair.
 
 Examples:
-- sleeve ↔ armhole
-- front torso ↔ back torso side seams
-- inseam ↔ inseam
+- sleeve to armhole
+- front torso to back torso side seams
+- shoulder seams on shirts
+- inseam to inseam
+- pleats - one side to the other
 - duplicated pieces, if intended to be one solid piece should be matched on the folded edge.
 
 <img src="../../docs/images/lassotoolex_7.png" width="350">
@@ -151,15 +123,16 @@ Once all seam relationships are defined, the garment topology is complete.
 
 <img src="../../docs/images/lassotoolex_8.png" width="350">
 
-*Figure 8: Completed seam pairing layout.*
 
 ---
 
-# Exporting the Pattern
+## Exporting the Pattern
 
-Press `J` to export all saved panels and seam relationships into the .json filetype.
+Press `J` to export all saved panels and seam relationships into the KSON filetype.
 
 The exported format is compatible with the downstream geometry and ML pipeline.
+
+Further instructions on using the exported JSON file to run the model are located in the main `readme` file.
 
 ---
 
