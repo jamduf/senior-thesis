@@ -12,11 +12,13 @@ Install all dependencies by running:
 ```
 $ pip3 install -r requirements.txt
 ```
-Convert an input pattern (in .png format) into the .json format the resizing model expects. Run this command from the root: 
+Convert an input pattern (in .png format) into the JSON format that the resizing model expects using the lasso tool. 
+
+Run this command from the root: 
 ```
 $ python3 src/project/pattern_lasso_v2.py
 ```
-This command opens your files, alternatively move an image file into your root repo and run the following command: 
+This command opens your files. Alternatively, move an image file into your root repo and run the following command: 
 ```
 $ python3 src/project/pattern_lasso_v2.py image.png
 ```
